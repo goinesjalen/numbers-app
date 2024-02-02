@@ -13,7 +13,7 @@
         <input id="input1"/>
         <label>+</label>
         <input id="input2"/>
-        <button onclick="arithmeticAdition()">
+        <button onclick="arithmeticAddition()">
         =
         </button>
         <p id="output1"></p>
@@ -25,11 +25,29 @@
 </body>
 
 <script>
-    function arithmeticAdition(){
-        let num1 = document.getElementById('input1')
-        let num2 = document.getElementById('input2')
-        document.getElementById('output1').innerHTML = Number(num1.value) + Number(num2.value)
+    async function arithmeticAddition() {
+        let num1 = document.getElementById('input1').value;
+        let num2 = document.getElementById('input2').value;
+
+        try {
+            // Make a GET request to the arithmetic-service
+            const response = await fetch(`http://localhost:3000/add?num1=${num1}&num2=${num2}`);
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+
+            // Parse the JSON response
+            const result = await response.json();
+
+            // Display the result
+            document.getElementById('output1').innerHTML = result.result;
+        } catch (error) {
+            console.error('Error:', error.message);
+            document.getElementById('output1').innerHTML = 'Error occurred';
+        }
     }
+
 
 </script>
 
